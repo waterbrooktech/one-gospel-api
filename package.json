@@ -14,7 +14,8 @@
     "mongoose-unique-validator": "^4.0.0"
   },
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
