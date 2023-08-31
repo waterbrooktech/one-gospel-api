@@ -13,6 +13,9 @@
     "mongoose": "^7.4.2",
     "mongoose-unique-validator": "^4.0.0"
   },
+  "engines": {
+    "node": "16.14.0"
+  },
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js"
