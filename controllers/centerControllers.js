@@ -29,8 +29,11 @@ const addMemberToGospelCenter = async (req, res) => {
     member = await memberServices.updateMember(member._id, member);
   }
 
-  if (!center.registeredAttendees.include(member._id))
+  if (Array.isArray(center.registeredAttendees) && !center.registeredAttendees.includes(member._id)) {
     center.registeredAttendees.push(member._id);
+  } else {
+    center.registeredAttendees = [member._id];
+  }
 
   await centerServices.saveCenter(center);
 
