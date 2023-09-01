@@ -1,3 +1,5 @@
+const { isValidEmail, isValidPhoneNumber } = require("../utils/string.utils");
+
 const ADDRESS_CHARACTER_LIMIT = 20;
 const MAX_CAPACITY_LOWER_LIMIT = 3;
 const MAX_CAPACITY_UPPER_LIMIT = 50;
@@ -36,6 +38,25 @@ const validateCreate = (req, res, next) => {
   next();
 };
 
+const validateMemberRegistration = (req, res, next) => {
+  const { email, name, phoneNumber } = req.body;
+
+  if (!email || !isValidEmail(email)) {
+    return res.status(400).send({ message: `Invalid email address` });
+  }
+
+  if (!name || name.length < 3) {
+    return res.status(400).send({ message: 'Name must be at least 3 characters.' });
+  }
+
+  if (!phoneNumber || !isValidPhoneNumber(phoneNumber)) {
+    return res.status(400).send({ message: 'Must have a valid phone number.' });
+  }
+
+  next();
+};
+
 module.exports = {
-  validateCreate
+  validateCreate,
+  validateMemberRegistration
 };

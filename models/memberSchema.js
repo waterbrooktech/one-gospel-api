@@ -16,6 +16,10 @@ const memberSchema = new Schema({
     type: String,
     unique: true
   },
+  altPhoneNumbers: [{
+    require: false,
+    type: String
+  }],
 }, {
   timestamps: true
 });

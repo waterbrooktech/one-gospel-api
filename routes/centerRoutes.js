@@ -1,5 +1,6 @@
 const { CenterControllers } = require('../controllers');
 const { centerMiddleware } = require('../middleware');
+const { validateMemberRegistration } = require('../middleware/centerMiddleware');
 const { validateCreate } = centerMiddleware;
 
 const {
@@ -18,7 +19,8 @@ module.exports = function(router) {
     .post(validateCreate, createGospelCenter)
     .get(getGospelCenters);
 
-  router.post(`${basePath}/:id/register`, addMemberToGospelCenter);
+  router.route(`${basePath}/:id/register`)
+    .post(validateMemberRegistration, addMemberToGospelCenter);
 
   router.route(`${basePath}/:id`)
     .get(getGospelCenter)

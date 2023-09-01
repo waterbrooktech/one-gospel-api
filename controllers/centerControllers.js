@@ -1,8 +1,40 @@
-const { Center } = require('../models');
-const { centerServices } = require('../services');
+const { Center, Member } = require('../models');
+const { centerServices, memberServices } = require('../services');
 
-const addMemberToGospelCenter = (req, res) => {
-  res.status(200).send({ message: 'add member placeholder' });
+const addMemberToGospelCenter = async (req, res) => {
+  const { id } = req.params;
+  const { email, name, phoneNumber } = req.body;
+
+  const center = await centerServices.getCenter(id);
+
+  if (!center) {
+    return res.status(400).send({ message: 'Center does not exist.' });
+  }
+
+  if (center.maxCapacity <= center.registeredAttendees.length) {
+    return res.status(400).send({ message: "We're sorry but this center has reached full capacity. Please try another center close to you." });
+  }
+
+  let member = await memberServices.getMember({ $or: [{ email }, { phoneNumber }] });
+
+  if (!member) {
+    member = await memberServices.saveMember(new Member({ email, name, phoneNumber }));
+  } else {
+    if (member.email != email)
+      member.email = email;
+
+    if (member.phoneNumber != phoneNumber && !member.altPhoneNumbers.includes(phoneNumber))
+      member.altPhoneNumbers.push(phoneNumber);
+
+    member = await memberServices.updateMember(member._id, member);
+  }
+
+  if (!center.registeredAttendees.include(member._id))
+    center.registeredAttendees.push(member._id);
+
+  await centerServices.saveCenter(center);
+
+  res.status(200).send({ message: 'You have successfully registered for this center. See you soon!' });
 };
 
 const archiveGospelCenter = (req, res) => {
@@ -20,7 +52,7 @@ const createGospelCenter = async (req, res) => {
 const getGospelCenters = async (req, res) => {
   const result = await centerServices.getCenters();
   res.status(200).send(
-    { data: result.map(({ address, area, maxCapacity, registeredAttendees }) => ({ address, area, maxCapacity, registeredCount: registeredAttendees.length })) }
+    { data: result.map(({ _id, address, area, maxCapacity, registeredAttendees }) => ({ address, area, id: _id, maxCapacity, registeredCount: registeredAttendees.length })) }
   );
 };
 
