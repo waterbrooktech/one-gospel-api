@@ -40,7 +40,7 @@ const addMemberToGospelCenter = async (req, res) => {
   res.status(200).send({ message: 'You have successfully registered for this center. See you soon!' });
 };
 
-const archiveGospelCenter = (req, res) => {
+const archiveGospelCenter = (_, res) => {
   res.status(200).send({ message: 'archive placeholder' });
 };
 
@@ -67,11 +67,19 @@ const updateGospelCenters = (req, res) => {
   res.status(200).send({ message: 'update placeholder' });
 };
 
+
+const resetCenterAttendees = async () => {
+  console.log('Started resetting all centers...')
+  await Center.updateMany({ }, { registeredAttendees: [] });
+  console.log('Successfully reset all centers!')
+};
+
 module.exports = {
   addMemberToGospelCenter,
   archiveGospelCenter,
   createGospelCenter,
   getGospelCenters,
   getGospelCenter,
+  resetCenterAttendees,
   updateGospelCenters
 };
