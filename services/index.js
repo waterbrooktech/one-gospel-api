@@ -1,10 +1,12 @@
+require('dotenv').config();
+
 const { default: mongoose } = require('mongoose');
 
 const centerServices = require('./centerServices');
 const memberServices = require('./memberServices');
 const postServices = require('./postServices');
 
-const dbURI = 'mongodb+srv://abisolawal:rGnZgnys3jGM66jy@one-gospel-dev-cluster.gi8fbwg.mongodb.net/twb-post-board-app?retryWrites=true&w=majority';
+const dbURI = process.env.DB_URI;
 
 mongoose.connect(
   dbURI,
