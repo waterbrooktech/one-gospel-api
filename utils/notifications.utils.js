@@ -2,10 +2,7 @@ const { DOMAIN_NAME, emailClient } = require('../clients/email.client');
 const { isValidEmail } = require('./string.utils');
 
 const sendOneGospelRegistrationEmail = async  (to = {}, data = {}) => {
-  const {
-    address = 'N/A',
-    contacts = []
-  } = data;
+  const { locations = [] } = data;
 
   if (!to.email || !isValidEmail(to.email)) {
     const errorString = 'Invalid email address. Please provide a valid email';
@@ -13,7 +10,13 @@ const sendOneGospelRegistrationEmail = async  (to = {}, data = {}) => {
     return null;
   }
 
-  const formattedContacts = contacts.map(contact => `${contact.name} <${contact.phoneNumber}>`).join(', ');
+  const formattedLocations = locations.map(location => ({ ...location, contacts: location.contacts.map(contact => `${contact.name} <${contact.phoneNumber}>`).join(', ') }));
+
+  if (locations.length < 1) {
+    const errorString = 'Must have at least 1 location';
+    console.log(errorString)
+    return null;
+  }
 
   const emailPayload = {
     from: 'The Waterbrook Community <community@thewaterbrook.com>',
@@ -21,9 +24,7 @@ const sendOneGospelRegistrationEmail = async  (to = {}, data = {}) => {
     cc: 'community@thewaterbrook.com',
     subject: 'Thank You for Registering for One Gospel!',
     template: 'one gospel registration',
-    'h:X-Mailgun-Variables': JSON.stringify({
-      address, contacts: formattedContacts
-    })
+    'h:X-Mailgun-Variables': JSON.stringify({ locations: formattedLocations })
   };
 
   try {

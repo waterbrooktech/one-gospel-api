@@ -28,6 +28,12 @@ const addMemberToGospelCenter = async (req, res) => {
       member.altPhoneNumbers.push(phoneNumber);
 
     member = await memberServices.updateMember(member._id, member);
+
+    const registeredCenters = await centerServices.getCenters({ registeredAttendees: { $in: [ member._id ] } });
+
+    if (registeredCenters.length > 1) {
+      return res.status(400).send({ message: "We're sorry but you can only register for maximum of 2 centers." });
+    }
   }
 
   if (Array.isArray(center.registeredAttendees) && !center.registeredAttendees.includes(member._id)) {
@@ -40,7 +46,7 @@ const addMemberToGospelCenter = async (req, res) => {
 
   sendOneGospelRegistrationEmail(
     { email: member.email },
-    { address: center.address, contacts: center.contacts }
+    { locations: [{ address: center.address, contacts: center.contacts }] }
   );
 
   res.status(200).send({ message: 'You have successfully registered for this center. See you soon!' });

@@ -28,14 +28,15 @@ module.exports = function(router) {
     .put(updateGospelCenters)
     .delete(archiveGospelCenter);
 
-  router.post('/testing', (req, res) => {
-    try {
-      sendOneGospelRegistrationEmail();
-      res.status(200).send({ message: 'Email sent successfully' });
-    } catch(e) {
-      return res.status(500).send({ message: 'Email failed to send', error: e });
-    }
-  });
+    // Only for testing emails for now
+  // router.post('/testing', (req, res) => {
+  //   try {
+  //     sendOneGospelRegistrationEmail({ email: 'abiso.lawal@gmail.com'}, req.body);
+  //     res.status(200).send({ message: 'Email sent successfully' });
+  //   } catch(e) {
+  //     return res.status(500).send({ message: 'Email failed to send', error: e });
+  //   }
+  // });
 
   return router;
 };
