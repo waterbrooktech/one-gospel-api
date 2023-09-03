@@ -10,8 +10,18 @@ const isValidPhoneNumber = (phoneNumber) => {
   return /\d{11}/.test(phoneNumber);
 };
 
+const isValidURL = (link) => {
+  try {
+    new URL(link);
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
+
 
 module.exports = {
   isValidEmail,
-  isValidPhoneNumber
+  isValidPhoneNumber,
+  isValidURL
 };

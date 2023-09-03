@@ -15,6 +15,10 @@ const postSchema = new Schema({
     require: false,
     type: Date
   },
+  link: {
+    require: false,
+    type: String
+  },
   isArchived: {
     default: false,
     type: Boolean
