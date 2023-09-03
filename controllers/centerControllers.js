@@ -1,5 +1,6 @@
 const { Center, Member } = require('../models');
 const { centerServices, memberServices } = require('../services');
+const { sendOneGospelRegistrationEmail } = require('../utils/notifications.utils');
 
 const addMemberToGospelCenter = async (req, res) => {
   const { id } = req.params;
@@ -36,6 +37,11 @@ const addMemberToGospelCenter = async (req, res) => {
   }
 
   await centerServices.saveCenter(center);
+
+  sendOneGospelRegistrationEmail(
+    { email: member.email },
+    { address: center.address, contacts: center.contacts }
+  );
 
   res.status(200).send({ message: 'You have successfully registered for this center. See you soon!' });
 };

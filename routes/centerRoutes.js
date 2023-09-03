@@ -1,6 +1,7 @@
 const { CenterControllers } = require('../controllers');
 const { centerMiddleware } = require('../middleware');
 const { validateMemberRegistration } = require('../middleware/centerMiddleware');
+const { sendOneGospelRegistrationEmail } = require('../utils/notifications.utils');
 const { validateCreate } = centerMiddleware;
 
 const {
@@ -26,6 +27,15 @@ module.exports = function(router) {
     .get(getGospelCenter)
     .put(updateGospelCenters)
     .delete(archiveGospelCenter);
+
+  router.post('/testing', (req, res) => {
+    try {
+      sendOneGospelRegistrationEmail();
+      res.status(200).send({ message: 'Email sent successfully' });
+    } catch(e) {
+      return res.status(500).send({ message: 'Email failed to send', error: e });
+    }
+  });
 
   return router;
 };
