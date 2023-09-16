@@ -15,8 +15,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/api/v1', routes(router));
-app.use((err, _, res) => {
-  console.log(`Error occured: ${err}`);
+app.use((_, res) => {
+  // console.log(`Error occured: ${err}`);
   res.status(500).send('An error occured, please try again later or reach us at info@thewaterbrook.com');
 });
 

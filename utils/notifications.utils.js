@@ -6,7 +6,6 @@ const sendOneGospelRegistrationEmail = async  (to = {}, data = {}) => {
 
   if (!to.email || !isValidEmail(to.email)) {
     const errorString = 'Invalid email address. Please provide a valid email';
-    console.log(errorString)
     return null;
   }
 
@@ -14,7 +13,6 @@ const sendOneGospelRegistrationEmail = async  (to = {}, data = {}) => {
 
   if (locations.length < 1) {
     const errorString = 'Must have at least 1 location';
-    console.log(errorString)
     return null;
   }
 
